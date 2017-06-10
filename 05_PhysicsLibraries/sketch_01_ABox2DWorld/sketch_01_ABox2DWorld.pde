@@ -1,7 +1,10 @@
 /*
 **********************************
 * ITRODUCTION TO BOX2D
-*
+*      - Box with restutution
+       - Basic structures of creating a body
+       - Static and dynamic bodies
+       - PolygonSHape
 **********************************
 */
 
@@ -32,40 +35,29 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.*;
 
 Box2DProcessing box2d;     // NOT AS IN THE BOOK!!!!
-
-
-
-
+ArrayList<Box> boxes;
+Boundary floor;
 void setup() {
   size(500,500);
   background(50);
   box2d = new Box2DProcessing(this);     
   box2d.createWorld();      // Initializes a Box2D world with default settings
   box2d.setGravity(0,-10);
+   boxes = new ArrayList<Box>();
+   floor = new Boundary(width/2, height-10, width,20);
   
-  Vec2 wCircle = new Vec2(-10,5);
-  Vec2 pCircle = box2d.coordWorldToPixels(wCircle);
+}
+
+
+void draw(){
+  background(200);
+  if(mousePressed){
+   boxes.add(new Box()); 
+  }
   
-  ellipse(pCircle.x, pCircle.y, 15,15);
-  
-   BodyDef bd = new BodyDef();
-    bd.position.set(box2d.coordPixelsToWorld(width/2,height/2));
- 
-      Body body = box2d.createBody(bd);
-     
-    PolygonShape ps = new PolygonShape();
-    float w = box2d.scalarPixelsToWorld(150);
-    float h = box2d.scalarPixelsToWorld(100);
-    ps.setAsBox(w, h);
-     
-    FixtureDef fd = new FixtureDef();
-    fd.shape = ps;
-    fd.density = 1;
-    fd.friction = 0.3;
-    fd.restitution = 0.5;
-    
-    body.createFixture(fd);
-  
+  for(Box b : boxes) b.display();
+  box2d.step();
+  floor.display();
 }
 
 /*
